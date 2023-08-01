@@ -1,0 +1,81 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message %}
+        <div>
+            {{ message }}
+        </div>
+    {% endif %}
+    <h1>Listing: {{ listing.item_name }}</h1>
+    <div>
+        {% if listing.potentialBuyers.count == 0 or user.username in listing.potentialBuyers.all %}
+            <a href="{% url 'addWatchList' id=listing.pk username=user.username %}">Add to watchlist</a>
+        {% else %}
+            <a href="{% url 'removeWatchList' id=listing.pk username=user.username %}">Remove from watchlist</a>
+        {% endif %}
+    </div>
+    <img src="{{ listing.imageURL }}">
+    <p>{{ listing.item_description }}</p>
+    <h3>${{ listing.bids.last.price }} by {{ listing.bids.last.user.username }} 
+        {% if listing.bids.count == 1 %}
+            (Starting Bid)
+        {% elif listing.bids.count == 2 %}
+            ({{ listing.bids.count|add:"-1" }} bid)
+        {% else %}
+            ({{ listing.bids.count|add:"-1" }} bids)
+        {% endif %}
+    </h3>
+    {% if listing.user == user %}
+        {% if listing.openListing %}
+            <form action="{% url 'closeListing' id=listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Close Listing">
+            </form>
+        {% else %}
+            <h3>Listing has been closed</h3>
+        {% endif %}
+    {% else %}
+        {% if listing.openListing %}
+            <form action="{% url 'viewListing' id=listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="number" name="bid" placeholder="Bid">
+                <input type="hidden" name="username" value="{{ user.username }}">
+                <input type="submit" value="Place Bid">
+            </form>
+        {% else %}
+            {% if listing.bids.last.user.username == user.username %}
+                <h3>Congrats man you won</h3>
+            {% else %}
+                <h3>Sorry man the auction is closed</h3>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    <h3>Details</h3>
+    <ul>
+        <li>Listed by: {{ listing.user.username }}</li>
+        <li>Category: 
+            {% if listing.category == "" %}
+                <span>No Category Listed</span>
+            {% else %}
+                {{ listing.category }}
+            {% endif %}
+        </li>
+    </ul>
+    <form action="{% url 'commentListing' id=listing.id %}" method="post">
+        {% csrf_token %}
+        <textarea name="content" placeholder="Write a comment..."></textarea>
+        <input type="hidden" name="username" value="{{ user.username }}">
+        <input type="submit" value="Comment">
+    </form>
+    {% for comment in listing.comments.all %}
+        <div class="viewPage-comment">
+            <div class="viewPage-comment-title">
+                {{ comment.user.username }}
+            </div>
+            <div class="viewPage-comment-content">
+                {{ comment.text }}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

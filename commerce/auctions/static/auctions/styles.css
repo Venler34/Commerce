@@ -1,0 +1,72 @@
+body {
+    padding: 10px;
+}
+
+form > * {
+    display: block;
+    width: 100%;
+    margin: 20px 0px;
+    border: 1px solid #EBEBEB;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+form > textarea {
+    min-height: 300px;
+}
+
+form > input[type="submit"] {
+    background-color: #00B1FD;
+    color: white;
+    padding: 5px 15px;
+    width: fit-content;
+}
+
+.itemListing {
+    border: 1px solid #d9d9d9;
+    width: 20%;
+    padding: 0px;
+    height: fit-content;
+}
+
+.itemListing-date > p {
+    background-color: #e0e0e0;
+    color: #5b5b5c;
+    margin-bottom: 0px;
+    font-size: 10px;
+    padding: 15px;
+}
+.itemListing-date {
+    margin-top: 10px;
+}
+
+.itemListing-content {
+    padding: 10px;
+}
+
+.itemListing-images > img {
+    width: 100%;
+    max-height: 500px;
+}
+
+#activeListings {
+    display: flex;
+}
+
+#activeListings > * {
+    margin: 5px;
+}
+
+.viewPage-comment {
+    padding: 20px;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.viewPage-comment-title {
+    font-size: 18px;
+}
+
+.viewPage-comment-content {
+    font-size: 14px;
+}
